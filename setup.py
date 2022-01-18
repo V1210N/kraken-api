@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.1",
     author="Problem Company <V1210N@github.com>",
     author_email="alex@inflewental.com",
-    description="This is a python project",
+    description="Converts Kraken account balances to fiats.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
