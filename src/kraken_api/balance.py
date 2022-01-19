@@ -1,4 +1,4 @@
-import krakenex
+from kraken_api.api import KrakenAPI, KrakenCredentials
 
 FIAT_CURRENCIES = [
     'USD',
@@ -10,12 +10,11 @@ FIAT_CURRENCIES = [
     'JPY'
 ]
 
-class KrakenAPI():
-    """
-        Wrapper around the krakenex package, used for accessing the Kraken API. Currently works in the context of a single user.
-    """
 
-    client: krakenex.API
+class KrakenBalance(KrakenAPI):
+    """
+        Inherits from KrakenAPI. This class is used for balance-related operations, such as retrieving the account balance, spot to fiat rates, and calculating totals.
+    """
 
     fiat: str = None
     """
@@ -47,26 +46,16 @@ class KrakenAPI():
         }
     """
 
-    def __init__(self, key_path: str, fiat: str = "USD"):
-        """
-            @param key_path string\n
-            Path to the Kraken API key file.
-            The key must be in the following format:
+    def __init__(self, credentials: str | KrakenCredentials, fiat: str = "USD") -> None:
+        # @param fiat string\n
+        # Code for the fiat to use for conversions.\n
+        # Default: "USD"
 
-            PUBLICKEY\n
-            PRIVATEKEY\n
-
-            @param fiat string\n
-            Code for the fiat to use for conversions.\n
-            Default: "USD"
-        """
+        super().__init__(credentials)
 
         if fiat not in FIAT_CURRENCIES:
             raise Exception('Invalid fiat provided: ', fiat)
         self.fiat = fiat
-
-        self.client = krakenex.API()
-        self.client.load_key(key_path)
 
         self.update_balance()
         self.update_spot_fiat_rates()
@@ -93,7 +82,7 @@ class KrakenAPI():
             while spot.__len__() < 4:
                 spot = f'X{spot}'
 
-            query = f'{spot}Z{self.fiat}' 
+            query = f'{spot}Z{self.fiat}'
             spot_queries[query] = currency
             query_str += f'{query},'
 
@@ -142,7 +131,6 @@ class KrakenAPI():
             self.update_spot_fiat_rates()
 
         total = 0
-
 
         for spot in self.spot_fiat_rates:
             currency_amount = float(self.balance[spot])

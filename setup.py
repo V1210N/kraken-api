@@ -4,11 +4,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="Kraken Balance Retriever",
+    name="Kraken API Wrapper",
     version="0.0.1",
     author="Problem Company <V1210N@github.com>",
     author_email="alex@inflewental.com",
-    description="Converts Kraken account balances to fiats.",
+    description="Wraps methods offered by Krakenex in order to access Kraken's API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
