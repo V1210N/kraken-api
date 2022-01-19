@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from kraken_api.balance import KrakenBalance
+from kraken_api.api import KrakenAPI
 from pathlib import Path
 
 parser = ArgumentParser()
@@ -10,11 +10,12 @@ def main(
     fiat: str,
     key_path:str
 ):
-    k_balance = KrakenBalance(
+    k_api = KrakenAPI(
         credentials=key_path,
         fiat=fiat
     )
-    print(f'Total fiat: {fiat}: {k_balance.calculate_total_fiat()}')
+
+    print(f'Total fiat: {fiat}: {k_api.balance.calculate_total_fiat()}')
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import patch
+import krakenex
 from kraken_api.balance import KrakenBalance
 from pathlib import Path
 
@@ -13,14 +14,17 @@ MOCK_BALANCE: dict[str, str] = {
 
 
 def mock_update_balance(self: KrakenBalance):
-    self.balance = MOCK_BALANCE
+    self.account_balance = MOCK_BALANCE
 
 class BalanceTestCases(unittest.TestCase):
     api: KrakenBalance
 
     @patch.object(KrakenBalance, 'update_balance', mock_update_balance)
     def setUp(self) -> None:
-        self.api = KrakenBalance(Path(__file__).parent.parent.__str__() + "/kraken.key")
+        client = krakenex.API()
+        client.load_key(Path(__file__).parent.parent.__str__() + "/kraken.key")
+
+        self.api = KrakenBalance(client)
         assert self.api
 
         return super().setUp()
@@ -32,11 +36,11 @@ class BalanceTestCases(unittest.TestCase):
     @patch.object(KrakenBalance, 'update_balance', mock_update_balance)
     def test_update_balance(self):
         self.api.update_balance()
-        assert self.api.balance
+        assert self.api.account_balance
 
     def test_calculate_total_fiat(self):
         api = self.api
-        api.balance = MOCK_BALANCE
+        api.account_balance = MOCK_BALANCE
 
         total = api.calculate_total_fiat()
         print(f'Total fiat: {self.api.fiat} ', total)

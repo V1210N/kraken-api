@@ -1,4 +1,5 @@
 import krakenex
+from kraken_api.balance import KrakenBalance
 
 class KrakenCredentials():
     key: str
@@ -15,7 +16,13 @@ class KrakenAPI():
 
     client: krakenex.API
 
-    def __init__(self, credentials: str | KrakenCredentials) -> None:
+    balance: KrakenBalance
+
+    def __init__(
+        self,
+        credentials: str | KrakenCredentials,
+        fiat:str="USD"
+        ) -> None:
         """
             @param credentials string | KrakenCredentials\n
             Either a path to the Kraken API key file or the actual content.
@@ -33,4 +40,4 @@ class KrakenAPI():
             self.client = krakenex.API()
             self.client.load_key(credentials)
 
-        print("client: ", self.client)
+        self.balance = KrakenBalance(self.client, fiat)

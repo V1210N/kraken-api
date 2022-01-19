@@ -1,4 +1,4 @@
-from kraken_api.api import KrakenAPI, KrakenCredentials
+import krakenex
 
 FIAT_CURRENCIES = [
     'USD',
@@ -11,7 +11,9 @@ FIAT_CURRENCIES = [
 ]
 
 
-class KrakenBalance(KrakenAPI):
+class KrakenBalance():
+    client: krakenex.API
+
     """
         Inherits from KrakenAPI. This class is used for balance-related operations, such as retrieving the account balance, spot to fiat rates, and calculating totals.
     """
@@ -34,7 +36,7 @@ class KrakenBalance(KrakenAPI):
         }
     """
 
-    balance: dict[str, str] = None
+    account_balance: dict[str, str] = None
     """
         Stores user's account balance.
 
@@ -46,12 +48,14 @@ class KrakenBalance(KrakenAPI):
         }
     """
 
-    def __init__(self, credentials: str | KrakenCredentials, fiat: str = "USD") -> None:
-        # @param fiat string\n
-        # Code for the fiat to use for conversions.\n
-        # Default: "USD"
+    def __init__(self, client: krakenex.API, fiat: str = "USD") -> None:
+        """
+            @param fiat string
+            Code for the fiat to use for conversions.\n
+            Default: "USD"
+        """
 
-        super().__init__(credentials)
+        self.client = client
 
         if fiat not in FIAT_CURRENCIES:
             raise Exception('Invalid fiat provided: ', fiat)
@@ -64,7 +68,7 @@ class KrakenBalance(KrakenAPI):
         """
             Retrieves fresh conversions for each of the user's spots to the configured fiat.
         """
-        assert self.balance
+        assert self.account_balance
 
         # Maps a query to the currency type.
         # i.e.: If fiat is USD, then XETHUSD is mapping for 1 ETH's value when converted to USD.
@@ -72,7 +76,7 @@ class KrakenBalance(KrakenAPI):
         spot_queries: dict[str, str] = {}
         query_str = ''
 
-        for currency in self.balance:
+        for currency in self.account_balance:
             # Skip the fiat entries
             if currency in FIAT_CURRENCIES:
                 continue
@@ -118,7 +122,7 @@ class KrakenBalance(KrakenAPI):
             raise Exception(
                 'Empty response while attempting to update balance.')
 
-        self.balance = response['result']
+        self.account_balance = response['result']
 
     def calculate_total_fiat(self, update=False) -> float:
         """
@@ -133,13 +137,13 @@ class KrakenBalance(KrakenAPI):
         total = 0
 
         for spot in self.spot_fiat_rates:
-            currency_amount = float(self.balance[spot])
+            currency_amount = float(self.account_balance[spot])
             spot_to_fiat = float(self.spot_fiat_rates[spot])
 
             total += currency_amount * spot_to_fiat
 
         # Add the fiat itself.
-        if self.fiat in self.balance:
-            total += float(self.balance[self.fiat])
+        if self.fiat in self.account_balance:
+            total += float(self.account_balance[self.fiat])
 
         return total
