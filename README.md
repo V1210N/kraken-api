@@ -16,8 +16,10 @@ Make sure you aren't confusing `Kraken` with `Kraken Futures`. These use differe
 1. Run `setup.py` and `pip install -r requirements.txt` to setup the project.
 
 2. Create a `kraken.key` file at the project root. It should follow this format:
+```
     PUBLICAPIKEY
     PRIVATEAPIKEY
+```
 
 3. Run `python src/main.py`. This will log your account balance as a fiat.
 
