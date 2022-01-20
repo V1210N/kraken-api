@@ -7,6 +7,7 @@ If not specified, the application uses USD as the fiat.
 1. Python version 3.0 or greater and `pip`.
 2. A Kraken account with at least some balance.
     - If your Kraken account has no balance, the app will fail.
+        - Tests still work though, using mock data. These can be run with `python -m unittest test_api.py` from within the tests folder.
 3. Credentials for an API key (public key and private key) with access to query funds.
 
 Make sure you aren't confusing `Kraken` with `Kraken Futures`. These use different APIs and currently this project doesn't support Kraken Futures.
