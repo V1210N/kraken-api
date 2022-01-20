@@ -41,3 +41,6 @@ class KrakenAPI():
             self.client.load_key(credentials)
 
         self.balance = KrakenBalance(self.client, fiat)
+
+    def __del__(self):
+        self.client.close()

@@ -63,6 +63,9 @@ class KrakenBalance():
 
         self.update_balance()
         self.update_spot_fiat_rates()
+    
+    def __del__(self):
+        self.client.close()
 
     def update_spot_fiat_rates(self):
         """
