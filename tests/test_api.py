@@ -1,11 +1,13 @@
+from typing import Dict
 import unittest
 from unittest.mock import patch
 import krakenex
 from kraken_api.balance import KrakenBalance
 from pathlib import Path
 
-# Useful in order to test the calculated fiat while you don't have access to an account with a balance.
-MOCK_BALANCE: dict[str, str] = {
+# Useful in order to test the calculated fiat while you don't have access to an account with balance.
+# Uncomment mocking if you wish to check with a real account.
+MOCK_BALANCE: Dict[str, str] = {
     'XBT': '1.203256',
     'USDT': '1.4030',
     'XETH': '3.29120',
@@ -40,7 +42,6 @@ class BalanceTestCases(unittest.TestCase):
 
     def test_calculate_total_fiat(self):
         api = self.api
-        api.account_balance = MOCK_BALANCE
 
         total = api.calculate_total_fiat()
         print(f'Total fiat: {self.api.fiat} ', total)

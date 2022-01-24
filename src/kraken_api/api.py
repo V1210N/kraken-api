@@ -1,13 +1,11 @@
+from dataclasses import dataclass
 import krakenex
 from kraken_api.balance import KrakenBalance
 
+@dataclass
 class KrakenCredentials():
     key: str
     secret: str
-
-    def __init__(self, key: str, secret: str) -> None:
-        self.key = key
-        self.secret = secret
 
 class KrakenAPI():
     """

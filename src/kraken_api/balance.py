@@ -1,3 +1,4 @@
+from typing import Dict
 import krakenex
 
 FIAT_CURRENCIES = [
@@ -25,7 +26,7 @@ class KrakenBalance():
         Example: "USD"
     """
 
-    spot_fiat_rates: dict[str, str] = {}
+    spot_fiat_rates: Dict[str, str] = {}
     """
         Holds the price conversions of spots to the configured fiat. For example, how much 1 BTC (XBT) converts to USD.
 
@@ -36,7 +37,7 @@ class KrakenBalance():
         }
     """
 
-    account_balance: dict[str, str] = None
+    account_balance: Dict[str, str] = None
     """
         Stores user's account balance.
 
@@ -63,7 +64,7 @@ class KrakenBalance():
 
         self.update_balance()
         self.update_spot_fiat_rates()
-    
+
     def __del__(self):
         self.client.close()
 
@@ -76,7 +77,7 @@ class KrakenBalance():
         # Maps a query to the currency type.
         # i.e.: If fiat is USD, then XETHUSD is mapping for 1 ETH's value when converted to USD.
         # { "XETH" : "ETH" }
-        spot_queries: dict[str, str] = {}
+        spot_queries: Dict[str, str] = {}
         query_str = ''
 
         for currency in self.account_balance:
