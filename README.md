@@ -4,7 +4,7 @@ If not specified, the application uses USD as the fiat.
 
 # Requirements
 
-1. Python version 3.0 or greater and `pip`.
+1. Python version 3.10 or greater and `pip`.
 2. A Kraken account with at least some balance.
     - If your Kraken account has no balance, the app will fail.
         - Tests still work though, using mock data. These can be run with `python -m unittest test_api.py` from within the tests folder.
